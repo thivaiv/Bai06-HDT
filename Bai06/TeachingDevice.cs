@@ -6,19 +6,33 @@ using System;
 
 namespace Bai06
 {
-    public class TeachingDevice : Device
+    //thiet bi giang day
+    public abstract class TeachingDevice : Device
     {
+        //so ngay cho muon toi da
         public int MaxBorrowDays { get; set; }
 
-        public TeachingDevice(string id, string name, int year, decimal price, int maxBorrowDays)
+        public TeachingDevice(string id, string name, int year, decimal price, int maxDays)
             : base(id, name, year, price)
         {
-            MaxBorrowDays = maxBorrowDays;
+            MaxBorrowDays = maxDays;
         }
 
-        public override decimal CalculateAnnualMaintenanceCost()
+        //chuyen sang da muon
+        public void MarkAsBorrowed()
         {
-            return PurchasePrice * 0.1m;
+            Status = DeviceStatus.Borrowed;
+        }
+
+        //chuyen sang san sang
+        public void MarkAsAvailable()
+        {
+            Status = DeviceStatus.Available;
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() + " | Toi da: " + MaxBorrowDays + " ngay";
         }
     }
 }
