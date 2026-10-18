@@ -6,26 +6,18 @@ using System;
 
 namespace Bai06
 {
-    //dieu khien may chieu
+    //điều khiển máy chiếu
     public class ProjectorRemote : TeachingDevice
     {
-        public string SupportedProjector { get; set; }
-
-        public ProjectorRemote(string id, string name, int year, decimal price, string projector, int maxDays = 1)
+        public ProjectorRemote(string id, string name, int year, decimal price, int maxDays = 1)
             : base(id, name, year, price, maxDays)
         {
-            SupportedProjector = projector;
         }
 
-        //8% gia mua
+        //tiền bảo trì 8%
         public override decimal CalculateAnnualMaintenanceCost()
         {
             return PurchasePrice * 0.08m;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString() + " | May chieu: " + SupportedProjector;
         }
     }
 }

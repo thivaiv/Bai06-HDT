@@ -4,7 +4,6 @@
 /****************/
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Bai06
 {
@@ -29,24 +28,22 @@ namespace Bai06
             Items = new List<BorrowItem>();
         }
 
-
-
-
-        ////////
+        //thêm đồ vào phiếu
         public void AddDevice(TeachingDevice device, int borrowDays)
         {
-            // check null
+            //check null
             if (device == null)
             {
-                throw new Exception("thiet bi khong dc null");
+                throw new Exception("thiết bị không được null.");
             }
-            //check số ngày mượn
+
+            //check ngày mượn
             if (borrowDays <= 0 || borrowDays > device.MaxBorrowDays)
             {
                 throw new InvalidBorrowPeriodException(device.Id, borrowDays, device.MaxBorrowDays);
             }
 
-            //nếu đã tồn tại tiết bị trong phiếu
+            //check trùng đồ trong phiếu
             foreach (var i in Items)
             {
                 if (i.Device.Id == device.Id)
@@ -55,41 +52,35 @@ namespace Bai06
                 }
             }
 
-            //khi vượt giới hạn tbi
+            //check mượn quá số lượng
             if (Items.Count >= Borrower.GetMaximumDevices())
             {
-                throw new BorrowLimitExceededException(Borrower.BorrowerId , Borrower.GetMaximumDevices());
+                throw new BorrowLimitExceededException(Borrower.BorrowerId, Borrower.GetMaximumDevices());
             }
 
-            //check available
+            //check máy có sẵn sàng ko
             if (device.Status != DeviceStatus.Available)
             {
-                throw new DeviceUnavailableException(device.Id , device.Status);
+                throw new DeviceUnavailableException(device.Id, device.Status);
             }
 
-            ////
+            //thêm vào phiếu và đổi trạng thái máy
             DateTime dueDate = BorrowedDate.AddDays(borrowDays);
-
             device.MarkAsBorrowed();
             var item = new BorrowItem(device, BorrowedDate, dueDate);
             Items.Add(item);
-            ////
         }
 
-
-
-
-        ////////
+        //trả máy
         public decimal ReturnDevice(string deviceId, DateTime returnedDate)
         {
-
-            //check ID
+            //check mã
             if (deviceId == null || deviceId == "")
             {
-                throw new Exception("deviceId ko hop le");
+                throw new Exception("mã thiết bị không hợp lệ.");
             }
 
-            //tìm ID trong phiếu
+            //tìm máy trong phiếu
             BorrowItem found = null;
             foreach (var item in Items)
             {
@@ -105,38 +96,34 @@ namespace Bai06
                 throw new DeviceNotInSlipException(deviceId);
             }
 
-            //nếu đã trả
-            if(found.IsReturned)
+            //check đã trả trước đó chưa
+            if (found.IsReturned)
             {
                 throw new DeviceAlreadyReturnedException(deviceId);
             }
 
-            //so sánh ngày trả và ngày mượn
-            if(returnedDate < found.BorrowedDate)
+            //check ngày trả trước ngày mượn
+            if (returnedDate < found.BorrowedDate)
             {
-                throw new BorrowingException("ngay tra som hon ngay muon");
+                throw new BorrowingException("ngày trả sớm hơn ngày mượn.");
             }
 
-            //confirm trả
+            //trả máy và set lại sẵn sàng
             found.Return(returnedDate);
             found.Device.MarkAsAvailable();
 
-
-            //tính phí trễ hạn
+            //tính tiền phạt nếu trễ hạn
             decimal tienphat = 0;
             if (returnedDate > found.DueDate)
             {
-                
                 int late = (returnedDate - found.DueDate).Days;
-                tienphat = late * 50000m; //50k một ngày
+                tienphat = late * 50000m; //50k một ngày trễ
             }
-
 
             return tienphat;
         }
 
-
-        // Tính tổng tiền phạt trễ hạn 
+        //tổng tiền phạt cả phiếu
         public decimal CalculateTotalLateFee()
         {
             decimal totalFee = 0;
@@ -145,7 +132,7 @@ namespace Bai06
                 if (item.IsReturned && item.ReturnedDate > item.DueDate)
                 {
                     int lateDays = (item.ReturnedDate.Value - item.DueDate).Days;
-                    totalFee += lateDays * 50000m; // 50k một ngày
+                    totalFee += lateDays * 50000m; //50k một ngày trễ
                 }
             }
             return totalFee;

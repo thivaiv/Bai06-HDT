@@ -4,6 +4,7 @@
 /****************/
 namespace Bai06
 {
+    //trợ giảng mượn tối đa 2 thiết bị
     public class TeachingAssistant : IBorrower
     {
         public string BorrowerId { get; set; }
@@ -16,9 +17,10 @@ namespace Bai06
             FullName = name;
         }
 
+        //tối đa 2/phiếu
         public int GetMaximumDevices()
         {
-            return 5;
+            return 2;
         }
     }
 }

@@ -6,7 +6,7 @@ using System;
 
 namespace Bai06
 {
-    //trang thai
+    //trạng thái máy
     public enum DeviceStatus
     {
         Available,
@@ -16,7 +16,7 @@ namespace Bai06
 
     public abstract class Device
     {
-        //ma chi set 1 lan luc tao
+        //mã máy, gán 1 lần lúc tạo
         public string Id { get; }
 
         public string Name { get; set; }
@@ -27,10 +27,10 @@ namespace Bai06
             get { return namSuDung; }
             set
             {
-                //check nam
+                //check năm
                 if (value > DateTime.Now.Year)
                 {
-                    throw new Exception("nam ko hop le.");
+                    throw new Exception("năm không hợp lệ.");
                 }
                 namSuDung = value;
             }
@@ -42,10 +42,10 @@ namespace Bai06
             get { return giaMua; }
             set
             {
-                //check gia
+                //check giá
                 if (value <= 0)
                 {
-                    throw new Exception("gia phai > 0.");
+                    throw new Exception("giá phải lớn hơn 0.");
                 }
                 giaMua = value;
             }
@@ -55,25 +55,25 @@ namespace Bai06
 
         public Device(string id, string name, int year, decimal price)
         {
-            //check ma rong
+            //check mã rỗng
             if (id == null || id == "")
             {
-                throw new Exception("ma ko dc de trong.");
+                throw new Exception("mã không được để trống.");
             }
 
             Id = id;
             Name = name;
             YearPutIntoUse = year;
             PurchasePrice = price;
-            Status = DeviceStatus.Available; //mac dinh available
+            Status = DeviceStatus.Available; //mặc định sẵn sàng
         }
 
-        //tinh tien bao tri
+        //tiền bảo trì trên năm
         public abstract decimal CalculateAnnualMaintenanceCost();
 
         public override string ToString()
         {
-            return "[" + GetType().Name + "] " + Id + " - " + Name + " | Gia: " + PurchasePrice.ToString("N0") + "d | TT: " + Status;
+            return "[" + GetType().Name + "] " + Id + " - " + Name + " | Giá: " + PurchasePrice.ToString("N0") + "đ | TT: " + Status;
         }
     }
 }

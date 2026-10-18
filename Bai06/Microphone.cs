@@ -6,26 +6,18 @@ using System;
 
 namespace Bai06
 {
-    //micro giang day
+    //micro giảng dạy
     public class Microphone : TeachingDevice
     {
-        public string BatteryType { get; set; } //loai pin
-
-        public Microphone(string id, string name, int year, decimal price, string battery, int maxDays = 1)
+        public Microphone(string id, string name, int year, decimal price, int maxDays = 1)
             : base(id, name, year, price, maxDays)
         {
-            BatteryType = battery;
         }
 
-        //15% gia mua vi hay thay pin
+        //tiền bảo trì 15%
         public override decimal CalculateAnnualMaintenanceCost()
         {
             return PurchasePrice * 0.15m;
-        }
-
-        public override string ToString()
-        {
-            return base.ToString() + " | Pin: " + BatteryType;
         }
     }
 }

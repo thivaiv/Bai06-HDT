@@ -6,57 +6,60 @@ using System;
 
 namespace Bai06
 {
-    //base expception
+    //ngoại lệ cơ sở
     public class BorrowingException : Exception
     {
         public BorrowingException(string message) : base(message)
         {
         }
-        public BorrowingException(string message,Exception innerException)
+
+        public BorrowingException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
     }
 
-    // thiết bị không ở trạng thái Available
+    //máy chưa sẵn sàng
     public class DeviceUnavailableException : BorrowingException
     {
-
         public string DeviceId { get; }
+
         public DeviceStatus CurrentStatus { get; }
 
         public DeviceUnavailableException(string deviceId, DeviceStatus currentStatus) 
-            : base("Thiet bi " + deviceId + " : " + currentStatus)
+            : base("thiết bị " + deviceId + " : " + currentStatus)
         {
             DeviceId = deviceId;
             CurrentStatus = currentStatus;
         }
     }
 
-
-    // người mượn đã đạt số thiết bị tối đa
+    //mượn quá số lượng
     public class BorrowLimitExceededException : BorrowingException
     {
         public string BorrowerId { get; }
+
         public int MaximumDevices { get; }
 
-        public BorrowLimitExceededException(string borrowerId, int maximumDevices) : base("So luong thiet bi" + borrowerId + " vuot qua gioi han: " + maximumDevices)
+        public BorrowLimitExceededException(string borrowerId, int maximumDevices) 
+            : base("số lượng thiết bị " + borrowerId + " vượt quá giới hạn: " + maximumDevices)
         {
             BorrowerId = borrowerId;
             MaximumDevices = maximumDevices;
         }
     }
 
-
-    //Số ngày mượn không dương. 
+    //số ngày mượn ko hợp lệ
     public class InvalidBorrowPeriodException : BorrowingException
     {
         public string BorrowerId { get; }
+
         public int RequestedDays { get; }
+
         public int MaximumDays { get; }
 
         public InvalidBorrowPeriodException(string borrowerId, int requestedDays, int maximumDays) 
-            : base("nguoi muon " + borrowerId + " muon muon " + requestedDays + " ngay, khong hop le, toi da: " + maximumDays + " ngay")
+            : base("người mượn " + borrowerId + " muốn mượn " + requestedDays + " ngày, không hợp lệ, tối đa: " + maximumDays + " ngày")
         {
             BorrowerId = borrowerId;
             RequestedDays = requestedDays;
@@ -64,40 +67,39 @@ namespace Bai06
         }
     }
 
-
-    //cùng một thiết bị đã tồn tại trong phiếu. 
-    public class DuplicateDeviceException: BorrowingException
+    //trùng máy trong phiếu
+    public class DuplicateDeviceException : BorrowingException
     {
         public string DeviceId { get; }
-        public DuplicateDeviceException(string deviceId) : base("Thiet bi " + deviceId + " da co trong phieu muon")
+
+        public DuplicateDeviceException(string deviceId) 
+            : base("thiết bị " + deviceId + " đã có trong phiếu mượn")
         {
             DeviceId = deviceId;
         }
     }
 
-
-    //yêu cầu trả một thiết bị không thuộc phiếu
-    public class DeviceNotInSlipException: BorrowingException
+    //trả máy ko có trong phiếu
+    public class DeviceNotInSlipException : BorrowingException
     {
         public string DeviceId { get; }
-        public DeviceNotInSlipException(string deviceId) : base("Thiet bi " + deviceId + " khong co trong phieu muon")
+
+        public DeviceNotInSlipException(string deviceId) 
+            : base("thiết bị " + deviceId + " không có trong phiếu mượn")
         {
             DeviceId = deviceId;
         }
     }
 
-
-    //thiết bị trong phiếu đã được trả trước đó
+    //máy này đã trả rồi
     public class DeviceAlreadyReturnedException : BorrowingException
     {
         public string DeviceId { get; }
-        public DeviceAlreadyReturnedException(string deviceId) : base("Thiet bi " + deviceId + " da duoc tra")
+
+        public DeviceAlreadyReturnedException(string deviceId) 
+            : base("thiết bị " + deviceId + " đã được trả")
         {
             DeviceId = deviceId;
         }
     }
-
-
-
-
 }

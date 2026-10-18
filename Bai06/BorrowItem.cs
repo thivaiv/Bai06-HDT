@@ -6,6 +6,7 @@ using System;
 
 namespace Bai06
 {
+    //1 món đồ mượn trong phiếu
     public class BorrowItem
     {
         public TeachingDevice Device { get; set; }
@@ -29,6 +30,7 @@ namespace Bai06
             ReturnedDate = null;
         }
 
+        //lưu ngày trả
         public void Return(DateTime returnedDate)
         {
             ReturnedDate = returnedDate;
